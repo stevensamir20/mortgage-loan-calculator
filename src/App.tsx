@@ -7,13 +7,6 @@ function App() {
   const [income, setIncome] = useState("");
   const [result, setResult] = useState("");
 
-  const resetForm = () => {
-    setAge("");
-    setIsMarried(false);
-    setIncome("");
-    setResult("");
-  };
-
   const calculateMonthlyPayment = (
     loanAmount: number,
     annualRate: number,
@@ -31,7 +24,7 @@ function App() {
 
     let maxIncome = isMarried ? 18000 : 13000;
 
-    if (userIncome <= maxIncome && userAge >= 21 && userAge < 60) {
+    if (userIncome <= maxIncome && userAge >= 21 && userAge <= 60) {
       const years = Math.min(30, 60 - userAge);
       const estimatedLoan = 1000000;
       const testPayment = calculateMonthlyPayment(estimatedLoan, 3, years);
@@ -47,7 +40,7 @@ function App() {
     }
 
     maxIncome = isMarried ? 50000 : 40000;
-    if (userIncome <= maxIncome && userAge >= 23 && userAge < 60) {
+    if (userIncome <= maxIncome && userAge >= 23 && userAge <= 60) {
       const years = Math.min(25, 60 - userAge);
       const estimatedLoan = 1000000;
       const testPayment = calculateMonthlyPayment(estimatedLoan, 8, years);
@@ -114,12 +107,9 @@ function App() {
           />
         </div>
 
-        <div className="button-group">
-          <button onClick={calculateLoan} className="btn primary">
-            احسب
-          </button>
-          <button onClick={resetForm} className="btn">
-            إعادة تعيين
+        <div className="button-group single-button">
+          <button onClick={calculateLoan} className="btn primary large">
+            احسب قيمة التمويل
           </button>
         </div>
 

@@ -9,7 +9,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
 }
 
 .container {
@@ -47,14 +46,14 @@ body {
   margin-top: 0.5rem;
 }
 
-.button-group {
+.button-group.single-button {
   display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
 }
 
 .btn {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.2rem;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -65,6 +64,11 @@ body {
 
 .btn.primary {
   background-color: #2ecc71;
+}
+
+.btn.large {
+  font-size: 1.1rem;
+  padding: 0.75rem 2rem;
 }
 
 .result {
