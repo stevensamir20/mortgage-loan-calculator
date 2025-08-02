@@ -34,12 +34,18 @@ html[dir="ltr"] {
 
 .title {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
   color: #2c3e50;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group > label {
+  font-size: large;
+  font-weight: bold;
 }
 
 .input {
@@ -123,4 +129,10 @@ html[dir="ltr"] {
 .lang-switcher .active-lang {
   opacity: 0.5;
   cursor: default;
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: 70%;
+  }
 }
