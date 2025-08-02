@@ -1,0 +1,12 @@
+{
+  "title": "Egyptian Mortgage Loan Calculator",
+  "age": "Age",
+  "marital_status": "Marital Status",
+  "single": "Single",
+  "married": "Married",
+  "income": "Net Monthly Income",
+  "calculate": "Calculate Loan",
+  "not_eligible": "User is not eligible for any loan type.",
+  "loan_3_result": "• Max unit price is 1.4 million EGP\n• At least 6 months of work experience\n• Loan type: 3% for {{years}} years\n• Estimated loan amount: {{loan}} EGP\n• Monthly installment: {{installment}} EGP",
+  "loan_8_result": "• Max unit price is 2.5 million EGP\n• At least 6 months of work experience\n• Loan type: 8% for {{years}} years\n• Estimated loan amount: {{loan}} EGP\n• Monthly installment: {{installment}} EGP"
+}

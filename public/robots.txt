@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://stevensamir20.github.io/mortgage-loan-calculator/sitemap.xml

@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import "./i18n";
 import "./App.css";
 
 function App() {
+  const { t, i18n } = useTranslation();
   const [age, setAge] = useState("");
   const [isMarried, setIsMarried] = useState(false);
   const [income, setIncome] = useState("");
   const [result, setResult] = useState("");
+  const isArabic = i18n.language === "ar";
+
+  useEffect(() => {
+    document.documentElement.lang = isArabic ? "ar" : "en";
+    document.documentElement.dir = isArabic ? "rtl" : "ltr";
+    document.title = t("title");
+  }, [isArabic, t]);
 
   const calculateMonthlyPayment = (
     loanAmount: number,
@@ -32,14 +42,17 @@ function App() {
       maxLoan = Math.min(maxLoan, 1120000);
       const monthlyInstallment = calculateMonthlyPayment(maxLoan, 3, years);
       setResult(
-        `• الحد الأقصى لسعر الوحدة هو 1.4 مليون جنيه\n• يجب أن يكون لديك خبرة عمل لا تقل عن 6 أشهر\n• نوع القرض: 3% لمدة ${years} سنة\n• قيمة القرض التقريبية: ${maxLoan.toLocaleString()} جنيه\n• القسط الشهري: ${monthlyInstallment.toFixed(
-          0
-        )} جنيه`
+        t("loan_3_result", {
+          years,
+          loan: maxLoan.toLocaleString(),
+          installment: monthlyInstallment.toFixed(0),
+        })
       );
       return;
     }
 
     maxIncome = isMarried ? 50000 : 40000;
+
     if (userIncome <= maxIncome && userAge >= 23 && userAge <= 60) {
       const years = Math.min(25, 60 - userAge);
       const estimatedLoan = 1000000;
@@ -48,23 +61,50 @@ function App() {
       maxLoan = Math.min(maxLoan, 2000000);
       const monthlyInstallment = calculateMonthlyPayment(maxLoan, 8, years);
       setResult(
-        `• الحد الأقصى لسعر الوحدة هو 2.5 مليون جنيه\n• يجب أن يكون لديك خبرة عمل لا تقل عن 6 أشهر\n• نوع القرض: 8% لمدة ${years} سنة\n• قيمة القرض التقريبية: ${maxLoan.toLocaleString()} جنيه\n• القسط الشهري: ${monthlyInstallment.toFixed(
-          0
-        )} جنيه`
+        t("loan_8_result", {
+          years,
+          loan: maxLoan.toLocaleString(),
+          installment: monthlyInstallment.toFixed(0),
+        })
       );
       return;
     }
 
-    setResult("المستخدم غير مؤهل لأي من أنواع القروض.");
+    setResult(t("not_eligible"));
+
+    if (window.gtag) {
+      window.gtag("event", "calculate_loan_clicked", {
+        event_category: "engagement",
+        event_label: "Calculate Loan Button",
+        marital_status: isMarried ? "Married" : "Single",
+        income: Number(income),
+      });
+    }
   };
 
   return (
     <div className="page-wrapper">
+      <div className="lang-switcher">
+        <button
+          onClick={() => i18n.changeLanguage("ar")}
+          className={i18n.language === "ar" ? "active-lang" : ""}
+          disabled={i18n.language === "ar"}
+        >
+          العربية
+        </button>
+        <button
+          onClick={() => i18n.changeLanguage("en")}
+          className={i18n.language === "en" ? "active-lang" : ""}
+          disabled={i18n.language === "en"}
+        >
+          English
+        </button>
+      </div>
       <div className="container">
-        <h1 className="title">حاسبة قرض التمويل العقاري</h1>
+        <h1 className="title">{t("title")}</h1>
 
         <div className="form-group">
-          <label>السن:</label>
+          <label>{t("age")}:</label>
           <input
             type="number"
             value={age}
@@ -74,7 +114,7 @@ function App() {
         </div>
 
         <div className="form-group">
-          <label>الحالة الاجتماعية:</label>
+          <label>{t("marital_status")}:</label>
           <div className="radio-group">
             <label>
               <input
@@ -82,8 +122,8 @@ function App() {
                 name="marital"
                 checked={!isMarried}
                 onChange={() => setIsMarried(false)}
-              />{" "}
-              أعزب
+              />
+              {t("single")}
             </label>
             <label>
               <input
@@ -91,14 +131,14 @@ function App() {
                 name="marital"
                 checked={isMarried}
                 onChange={() => setIsMarried(true)}
-              />{" "}
-              متزوج
+              />
+              {t("married")}
             </label>
           </div>
         </div>
 
         <div className="form-group">
-          <label>صافي الدخل الشهري:</label>
+          <label>{t("income")}:</label>
           <input
             type="number"
             value={income}
@@ -109,7 +149,7 @@ function App() {
 
         <div className="button-group single-button">
           <button onClick={calculateLoan} className="btn primary large">
-            احسب قيمة التمويل
+            {t("calculate")}
           </button>
         </div>
 
