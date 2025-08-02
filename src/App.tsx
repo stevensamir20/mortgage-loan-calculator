@@ -9,6 +9,12 @@ function App() {
   const [isMarried, setIsMarried] = useState(false);
   const [income, setIncome] = useState("");
   const [result, setResult] = useState("");
+  const [loanData, setLoanData] = useState<null | {
+    years: number;
+    loan: number;
+    installment: number;
+    rate: number;
+  }>(null);
   const isArabic = i18n.language === "ar";
 
   useEffect(() => {
@@ -16,6 +22,20 @@ function App() {
     document.documentElement.dir = isArabic ? "rtl" : "ltr";
     document.title = t("title");
   }, [isArabic, t]);
+
+  useEffect(() => {
+    if (loanData) {
+      const { years, loan, installment, rate } = loanData;
+      const key = rate === 3 ? "loan_3_result" : "loan_8_result";
+      setResult(
+        t(key, {
+          years,
+          loan: loan.toLocaleString(),
+          installment: installment.toFixed(0),
+        })
+      );
+    }
+  }, [i18n.language, loanData, t]);
 
   const calculateMonthlyPayment = (
     loanAmount: number,
@@ -41,13 +61,12 @@ function App() {
       let maxLoan = Math.floor((monthlyPayable / testPayment) * estimatedLoan);
       maxLoan = Math.min(maxLoan, 1120000);
       const monthlyInstallment = calculateMonthlyPayment(maxLoan, 3, years);
-      setResult(
-        t("loan_3_result", {
-          years,
-          loan: maxLoan.toLocaleString(),
-          installment: monthlyInstallment.toFixed(0),
-        })
-      );
+      setLoanData({
+        years,
+        loan: maxLoan,
+        installment: monthlyInstallment,
+        rate: 3,
+      });
       return;
     }
 
@@ -60,16 +79,16 @@ function App() {
       let maxLoan = Math.floor((monthlyPayable / testPayment) * estimatedLoan);
       maxLoan = Math.min(maxLoan, 2000000);
       const monthlyInstallment = calculateMonthlyPayment(maxLoan, 8, years);
-      setResult(
-        t("loan_8_result", {
-          years,
-          loan: maxLoan.toLocaleString(),
-          installment: monthlyInstallment.toFixed(0),
-        })
-      );
+      setLoanData({
+        years,
+        loan: maxLoan,
+        installment: monthlyInstallment,
+        rate: 8,
+      });
       return;
     }
 
+    setLoanData(null);
     setResult(t("not_eligible"));
 
     if (window.gtag) {
